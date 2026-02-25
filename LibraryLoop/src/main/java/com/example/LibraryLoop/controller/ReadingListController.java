@@ -1,6 +1,7 @@
 package com.example.LibraryLoop.controller;
 
-import com.example.LibraryLoop.dto.*;
+import com.example.LibraryLoop.dto.list.ListDTO;
+import com.example.LibraryLoop.dto.seed.SeedDTO;
 import com.example.LibraryLoop.service.ReadingListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,6 @@ public class ReadingListController {
             @PathVariable String listId,
             @RequestBody SeedDTO dto) {
 
-        service.addBookToList(username, listId, dto);
+        service.addBookToList(username, Long.valueOf(listId), dto);
     }
 }

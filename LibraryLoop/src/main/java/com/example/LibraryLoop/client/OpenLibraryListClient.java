@@ -1,8 +1,8 @@
 package com.example.LibraryLoop.client;
 
-import com.example.LibraryLoop.dto.ListSearchResponseDTO;
-import com.example.LibraryLoop.dto.ListSeedsResponseDTO;
-import com.example.LibraryLoop.dto.UserListsResponseDTO;
+import com.example.LibraryLoop.dto.list.ListSearchResponseDTO;
+import com.example.LibraryLoop.dto.list.ListSeedsResponseDTO;
+import com.example.LibraryLoop.dto.list.UserListsResponseDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 

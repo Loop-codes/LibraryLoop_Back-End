@@ -1,4 +1,4 @@
-package com.example.LibraryLoop.dto;
+package com.example.LibraryLoop.dto.list;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

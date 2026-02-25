@@ -1,4 +1,4 @@
-package com.example.LibraryLoop.dto;
+package com.example.LibraryLoop.dto.book;
 
 public class BookSearchDTO {
 

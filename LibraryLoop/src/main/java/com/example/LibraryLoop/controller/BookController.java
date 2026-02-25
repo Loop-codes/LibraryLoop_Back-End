@@ -1,7 +1,10 @@
 package com.example.LibraryLoop.controller;
 
+import com.example.LibraryLoop.dto.book.BookSearchResponseDTO;
 import com.example.LibraryLoop.service.BookService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/books")
@@ -14,8 +17,8 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam String title) {
-        return service.searchBook(title);
+    public List<BookSearchResponseDTO> search(@RequestParam String title) {
+        return service.searchBooks(title);
     }
 
     @GetMapping("/editions/{workId}")

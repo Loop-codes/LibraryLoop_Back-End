@@ -1,5 +1,6 @@
-package com.example.LibraryLoop.dto;
+package com.example.LibraryLoop.dto.list;
 
+import com.example.LibraryLoop.dto.seed.SeedDTO;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -3,7 +3,8 @@ package com.example.LibraryLoop.service;
 import com.example.LibraryLoop.Repository.ReadingListRepository;
 import com.example.LibraryLoop.Repository.SavedBookRepository;
 import com.example.LibraryLoop.Repository.userRepository;
-import com.example.LibraryLoop.dto.*;
+import com.example.LibraryLoop.dto.list.ListDTO;
+import com.example.LibraryLoop.dto.seed.SeedDTO;
 import com.example.LibraryLoop.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,19 +58,21 @@ public class ReadingListService {
         );
     }
 
-    public void addBookToList(String username, String listId, SeedDTO dto) {
+    public void addBookToList(String username, Long listId, SeedDTO dto) {
 
-        ReadingList list = listRepository.findById(Long.parseLong(listId))
-                .orElseThrow();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        bookRepository.save(
-                SavedBook.builder()
-                        .title(dto.getTitle())
-                        .author(dto.getAuthor())
-                        .olid(dto.getOlid())
-                        .coverId(dto.getCoverId())
-                        .list(list)
-                        .build()
-        );
+        ReadingList list = listRepository.findById(listId)
+                .orElseThrow(() -> new RuntimeException("Lista não encontrada"));
+
+        SavedBook book = new SavedBook();
+        book.setTitle(dto.getTitle());
+        book.setAuthor(dto.getAuthor());
+        book.setOlid(dto.getOlid());
+        book.setCoverId(dto.getCoverId());
+        book.setList(list);
+
+        bookRepository.save(book);
     }
 }

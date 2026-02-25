@@ -1,4 +1,4 @@
-package com.example.LibraryLoop.dto;
+package com.example.LibraryLoop.dto.seed;
 
 import lombok.*;
 

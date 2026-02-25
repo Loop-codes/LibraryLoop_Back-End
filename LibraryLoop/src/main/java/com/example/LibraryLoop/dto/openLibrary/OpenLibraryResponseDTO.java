@@ -1,5 +1,6 @@
-package com.example.LibraryLoop.dto;
+package com.example.LibraryLoop.dto.openLibrary;
 
+import com.example.LibraryLoop.dto.book.BookDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

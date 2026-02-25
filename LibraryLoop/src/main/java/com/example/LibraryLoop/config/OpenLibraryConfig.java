@@ -1,4 +1,4 @@
-package com.example.LibraryLoop.client;
+package com.example.LibraryLoop.config;
 
 
 import org.springframework.context.annotation.Bean;
