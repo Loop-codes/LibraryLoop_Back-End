@@ -1,25 +1,25 @@
 package com.example.LibraryLoop.service;
 
 import com.example.LibraryLoop.client.OpenLibraryClient;
-import com.example.LibraryLoop.dto.BookDTO;
-import com.example.LibraryLoop.dto.OpenLibraryResponseDTO;
+import com.example.LibraryLoop.Repository.userRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BookService {
 
     private final OpenLibraryClient client;
+    private final userRepository userRepository;
 
-
-    public BookService(OpenLibraryClient client) {
+    public BookService(OpenLibraryClient client, userRepository userRepository) {
         this.client = client;
+        this.userRepository = userRepository;
     }
 
-    public List<BookDTO> searchForBookByTitle(String title) {
+    public String searchBook(String title) {
+        return client.searchBooks(title);
+    }
 
-        OpenLibraryResponseDTO response = client.searchforBook(title);
-        return  response.getDocs();
+    public String getEditions(String workId) {
+        return client.getEditions(workId);
     }
 }

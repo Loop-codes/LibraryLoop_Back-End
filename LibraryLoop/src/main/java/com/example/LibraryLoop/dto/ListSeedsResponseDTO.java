@@ -1,6 +1,5 @@
 package com.example.LibraryLoop.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +7,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@Data
-public class OpenLibraryResponseDTO {
+public class ListSeedsResponseDTO {
 
-    private List<BookDTO> docs;
+    private Integer size;
+    private List<SeedDTO> entries;
 }

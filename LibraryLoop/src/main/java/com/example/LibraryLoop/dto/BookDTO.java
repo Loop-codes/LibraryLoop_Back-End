@@ -10,9 +10,7 @@ import java.util.List;
 public class BookDTO {
 
     private String title;
-
     private List<String> author_name;
-
     private String first_publisher_year;
 
 }

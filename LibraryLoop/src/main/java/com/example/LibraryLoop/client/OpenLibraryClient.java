@@ -1,20 +1,30 @@
 package com.example.LibraryLoop.client;
 
-import com.example.LibraryLoop.dto.OpenLibraryResponseDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
 public class OpenLibraryClient {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
-    private final String URL =
-            "https://openlibrary.org/search.json?q=%s";
+    private static final String BASE_URL = "https://openlibrary.org";
 
-    public OpenLibraryResponseDTO searchforBook(String title){
-        String url = String.format(URL, title.replace(" ", "+"));
+    public OpenLibraryClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
-        return restTemplate.getForObject(url, OpenLibraryResponseDTO.class);
+    public String searchBooks(String title) {
+
+        String url = BASE_URL + "/search.json?title=" + title;
+
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String getEditions(String workId) {
+
+        String url = BASE_URL + "/works/" + workId + "/editions.json";
+
+        return restTemplate.getForObject(url, String.class);
     }
 }
