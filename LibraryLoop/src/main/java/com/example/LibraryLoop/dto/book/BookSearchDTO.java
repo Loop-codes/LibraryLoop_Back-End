@@ -1,5 +1,10 @@
 package com.example.LibraryLoop.dto.book;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class BookSearchDTO {
 
     private String title;
@@ -16,35 +21,4 @@ public class BookSearchDTO {
         this.olid = olid;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public Integer getCoverId() {
-        return coverId;
-    }
-
-    public String getOlid() {
-        return olid;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setCoverId(Integer coverId) {
-        this.coverId = coverId;
-    }
-
-    public void setOlid(String olid) {
-        this.olid = olid;
-    }
 }
