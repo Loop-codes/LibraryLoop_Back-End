@@ -1,10 +1,14 @@
 package com.example.LibraryLoop.service;
 
 import com.example.LibraryLoop.client.OpenLibraryClient;
+import com.example.LibraryLoop.dto.book.BookSearchDTO;
 import com.example.LibraryLoop.dto.edition.OpenLibraryEditionsResponse;
+import com.example.LibraryLoop.dto.openLibrary.OpenLibraryResponse;
 import com.example.LibraryLoop.dto.read.ReadLinkDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +36,27 @@ public class BookService {
         }
 
         return new ReadLinkDTO(false, null);
+    }
+
+    public List<BookSearchDTO> searchBooks(String title, int limit) {
+
+        OpenLibraryResponse response =
+                OpenLibraryClient.searchBooks(title);
+
+        return response.getDocs()
+                .stream()
+                .limit(limit)
+                .map(doc -> new BookSearchDTO(
+                        doc.getKey().replace("/works/", ""),
+                        doc.getTitle(),
+                        doc.getAuthor_name(),
+                        doc.getAuthor_key(),
+                        doc.getCover_i(),
+                        doc.getFirst_publish_year(),
+                        doc.getLanguage(),
+                        doc.getHas_fulltext(),
+                        doc.getEdition_count()
+                ))
+                .toList();
     }
 }

@@ -21,6 +21,9 @@ public class OpenLibraryDoc {
 
     private List<String> language;
 
+    private Boolean has_fulltext;
+    private Integer edition_count;
+
     // ⚠️ normalmente o OLID vem aqui
     private List<String> edition_key;
 }

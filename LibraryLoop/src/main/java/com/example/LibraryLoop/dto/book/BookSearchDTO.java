@@ -1,24 +1,22 @@
 package com.example.LibraryLoop.dto.book;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Setter
-@Getter
+import java.util.List;
+
+@Data
+@AllArgsConstructor
 public class BookSearchDTO {
 
-    private String title;
-    private String author;
-    private Integer coverId;
     private String olid;
-
-    public BookSearchDTO() {}
-
-    public BookSearchDTO(String title, String author, Integer coverId, String olid) {
-        this.title = title;
-        this.author = author;
-        this.coverId = coverId;
-        this.olid = olid;
-    }
+    private String title;
+    private List<String> authorName;
+    private List<String> authorKey;
+    private Integer coverId;
+    private Integer firstPublishYear;
+    private List<String> language;
+    private Boolean hasFullText;
+    private Integer editionCount;
 
 }
