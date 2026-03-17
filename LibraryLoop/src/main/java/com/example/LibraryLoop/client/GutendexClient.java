@@ -1,6 +1,6 @@
 package com.example.LibraryLoop.client;
 
-import com.example.LibraryLoop.dto.GutendexResponse;
+import com.example.LibraryLoop.dto.gutendex.GutendexResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 

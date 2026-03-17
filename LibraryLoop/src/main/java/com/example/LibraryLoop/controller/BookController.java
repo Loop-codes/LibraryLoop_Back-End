@@ -1,9 +1,10 @@
 package com.example.LibraryLoop.controller;
 
+import com.example.LibraryLoop.dto.book.BookReadResponse;
 import com.example.LibraryLoop.dto.book.BookSearchDTO;
 import com.example.LibraryLoop.dto.read.ReadLinkDTO;
 import com.example.LibraryLoop.service.BookService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,10 +12,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 @CrossOrigin(origins = "http://localhost:5173")
-@RequiredArgsConstructor
 public class BookController {
 
     private final BookService service;
+
+    private final BookService bookService;
+
+    public BookController(BookService service, BookService bookService) {
+        this.service = service;
+        this.bookService = bookService;
+    }
 
     // 🔗 rota antiga (link externo)
     @GetMapping("/{workId}/link")
@@ -36,12 +43,15 @@ public class BookController {
 
     // 📚 nova rota (ler livro completo Gutendex)
     @GetMapping("/{id}/read")
-    public String readBook(@PathVariable Long id) {
-        return service.readBook(id);
+    public ResponseEntity<BookReadResponse> readBook(@PathVariable Long id) {
+
+        String text = bookService.readBook(id);
+
+        return ResponseEntity.ok(new BookReadResponse(id, text));
     }
 
     // 🔎 buscar livros
-    @GetMapping("/search")
+    @GetMapping(value = "/search")
     public List<BookSearchDTO> searchBooks(
             @RequestParam String title,
             @RequestParam(defaultValue = "20") int limit) {

@@ -1,26 +1,25 @@
 package com.example.LibraryLoop.service;
 
 import com.example.LibraryLoop.client.GutendexClient;
-import com.example.LibraryLoop.dto.GutendexAuthor;
-import com.example.LibraryLoop.dto.GutendexBookResponse;
+import com.example.LibraryLoop.dto.gutendex.GutendexAuthor;
+import com.example.LibraryLoop.dto.gutendex.GutendexBookResponse;
 import com.example.LibraryLoop.dto.book.BookSearchDTO;
-import com.example.LibraryLoop.dto.GutendexResponse;
+import com.example.LibraryLoop.dto.gutendex.GutendexResponse;
 import com.example.LibraryLoop.dto.read.ReadLinkDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-
-import static com.example.LibraryLoop.client.OpenLibraryClient.restTemplate;
 
 @Service
 @RequiredArgsConstructor
 public class BookService {
 
     private final GutendexClient gutendexClient;
+    private final RestTemplate restTemplate; // ✅ injetado corretamente
 
 
     public List<BookSearchDTO> searchBooks(String title, int limit) {
@@ -52,15 +51,57 @@ public class BookService {
 
         String fullText = readBook(id);
 
-        int pageSize = 1000; // caracteres por página
-
+        int pageSize = 1500;
         List<String> pages = new ArrayList<>();
 
-        for (int i = 0; i < fullText.length(); i += pageSize) {
-            pages.add(fullText.substring(i, Math.min(i + pageSize, fullText.length())));
+        int start = 0;
+
+        while (start < fullText.length()) {
+
+            int end = Math.min(start + pageSize, fullText.length());
+
+            // evita cortar palavra no meio
+            if (end < fullText.length()) {
+                int lastSpace = fullText.lastIndexOf(" ", end);
+                if (lastSpace > start) {
+                    end = lastSpace;
+                }
+            }
+
+            pages.add(fullText.substring(start, end).trim());
+            start = end;
         }
 
         return pages;
+    }
+
+    private String cleanText(String text) {
+
+        if (text == null) return "";
+
+        // remove BOM
+        text = text.replace("\uFEFF", "");
+
+        // normaliza quebra de linha
+        text = text.replace("\r\n", "\n");
+
+        // remove cabeçalho
+        int start = text.indexOf("*** START OF");
+        if (start != -1) {
+            int firstLineBreak = text.indexOf("\n", start);
+            text = text.substring(firstLineBreak + 1);
+        }
+
+        // remove rodapé
+        int end = text.indexOf("*** END OF");
+        if (end != -1) {
+            text = text.substring(0, end);
+        }
+
+        // remove espaços excessivos
+        text = text.replaceAll("\n{3,}", "\n\n");
+
+        return text.trim();
     }
 
     public String readBook(Long id) {
@@ -77,14 +118,17 @@ public class BookService {
         String textUrl = response.getFormats()
                 .entrySet()
                 .stream()
-                .filter(f -> f.getKey().contains("text/html"))
+                .filter(f -> f.getKey().contains("text/plain; charset=utf-8")) // ✅ CORRETO
                 .findFirst()
                 .map(Map.Entry::getValue)
                 .orElse(null);
 
         if (textUrl == null) {
-            return "Livro não possui versão em texto";
+            throw new RuntimeException("Livro não encontrado");
         }
+
+        // força https
+        textUrl = textUrl.replace("http://", "https://");
 
         String book = restTemplate.getForObject(textUrl, String.class);
 
@@ -92,15 +136,13 @@ public class BookService {
             return "Erro ao carregar o livro";
         }
 
+        // remove BOM estranho
         book = book.replace("\uFEFF", "");
-        book = book.replaceAll("([a-z])([A-Z])", "$1 $2");
-        book = book.replaceAll("\\r", "");
-        book = book.replaceAll("([.,;:])([A-Za-z])", "$1 $2");
-        book = book.replaceAll("\\n+", "\n\n");
-        book = book.replaceAll(" +", " ");
 
+        // 🔥 LIMPEZA DO GUTENBERG
+        book = cleanText(book);
 
-        return restTemplate.getForObject(textUrl, String.class);
+        return book;
     }
 
     public ReadLinkDTO getReadLink(String bookId) {

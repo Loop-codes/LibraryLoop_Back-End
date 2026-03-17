@@ -1,5 +1,4 @@
 package com.example.LibraryLoop.entity;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +21,5 @@ public class SavedBook {
     private Integer coverId;
 
     @ManyToOne
-    @JoinColumn(name = "list_id")
-    private ReadingList list;
+    private BookList list;
 }

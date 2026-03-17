@@ -1,4 +1,4 @@
-package com.example.LibraryLoop.dto;
+package com.example.LibraryLoop.dto.gutendex;
 
 import lombok.Data;
 import java.util.Map;
