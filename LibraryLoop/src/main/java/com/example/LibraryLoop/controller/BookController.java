@@ -2,6 +2,7 @@ package com.example.LibraryLoop.controller;
 
 import com.example.LibraryLoop.dto.book.BookReadResponse;
 import com.example.LibraryLoop.dto.book.BookSearchDTO;
+import com.example.LibraryLoop.dto.book.PageResponse;
 import com.example.LibraryLoop.dto.read.ReadLinkDTO;
 import com.example.LibraryLoop.service.BookService;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,24 @@ public class BookController {
 
         return ResponseEntity.ok(new BookReadResponse(id, text));
     }
+
+    @GetMapping("/{id}/pages/{page}")
+    public ResponseEntity<PageResponse> getBookPage(
+            @PathVariable Long id,
+            @PathVariable int page
+    ) {
+
+        List<String> pages = bookService.getBookPages(id);
+
+        if (page < 0 || page >= pages.size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(
+                new PageResponse(page, pages.size(), pages.get(page))
+        );
+    }
+
 
     // 🔎 buscar livros
     @GetMapping(value = "/search")
