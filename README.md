@@ -40,7 +40,7 @@ Aplicação roda por padrão em:
 ------------------------------------------------------------------------
 
 # 🧠 Arquitetura Atual
-
+ESTRAGANDO O README
     Controller
        ↓
     Service
