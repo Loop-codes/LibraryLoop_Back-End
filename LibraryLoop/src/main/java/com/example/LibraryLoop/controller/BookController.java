@@ -15,42 +15,31 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class BookController {
 
-    private final BookService service;
-
     private final BookService bookService;
 
-    public BookController(BookService service, BookService bookService) {
-        this.service = service;
+    public BookController(BookService bookService) {
         this.bookService = bookService;
     }
 
-    // 🔗 rota antiga (link externo)
-    @GetMapping("/{workId}/link")
-    public ReadLinkDTO getReadLink(@PathVariable String workId) {
-        return service.getReadLink(workId);
+    // 🔎 BUSCAR LIVROS
+    @GetMapping("/search")
+    public List<BookSearchDTO> searchBooks(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "20") int limit
+    ) {
+        return bookService.searchBooks(title, limit);
     }
 
-    @GetMapping("/{id}/page/{page}")
-    public String getPage(@PathVariable Long id, @PathVariable int page) {
-
-        List<String> pages = service.getBookPages(id);
-
-        if (page < 1 || page > pages.size()) {
-            return "Página inválida";
-        }
-
-        return pages.get(page - 1);
-    }
-
-    // 📚 nova rota (ler livro completo Gutendex)
+    // 📖 LER LIVRO COMPLETO
     @GetMapping("/{id}/read")
     public ResponseEntity<BookReadResponse> readBook(@PathVariable Long id) {
 
-        String text = bookService.readBook(id);
+        String text = bookService.getFullBook(id);
 
         return ResponseEntity.ok(new BookReadResponse(id, text));
     }
 
+    // 📄 PAGINAÇÃO
     @GetMapping("/{id}/pages/{page}")
      public ResponseEntity<PageResponse> getBookPage(
             @PathVariable Long id,
@@ -66,6 +55,7 @@ public class BookController {
         return ResponseEntity.ok(
                 new PageResponse(page, pages.size(), pages.get(page))
         );
+<<<<<<< HEAD
     }   
 
     // 🔎 buscar livros
@@ -75,5 +65,13 @@ public class BookController {
             @RequestParam(defaultValue = "20") int limit) {
 
         return service.searchBooks(title, limit);
+=======
+    }
+
+    // 🔗 LINK EXTERNO (OPCIONAL)
+    @GetMapping("/{id}/link")
+    public ReadLinkDTO getReadLink(@PathVariable String id) {
+        return bookService.getReadLink(id);
+>>>>>>> origin/main
     }
 }
