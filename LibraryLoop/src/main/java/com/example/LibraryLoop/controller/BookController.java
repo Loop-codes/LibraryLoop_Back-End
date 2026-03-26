@@ -41,7 +41,7 @@ public class BookController {
 
     // 📄 PAGINAÇÃO
     @GetMapping("/{id}/pages/{page}")
-    public ResponseEntity<PageResponse> getBookPage(
+     public ResponseEntity<PageResponse> getBookPage(
             @PathVariable Long id,
             @PathVariable int page
     ) {
@@ -55,11 +55,23 @@ public class BookController {
         return ResponseEntity.ok(
                 new PageResponse(page, pages.size(), pages.get(page))
         );
+<<<<<<< HEAD
+    }   
+
+    // 🔎 buscar livros
+    @GetMapping(value = "/search")
+    public List<BookSearchDTO> searchBooks(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "20") int limit) {
+
+        return service.searchBooks(title, limit);
+=======
     }
 
     // 🔗 LINK EXTERNO (OPCIONAL)
     @GetMapping("/{id}/link")
     public ReadLinkDTO getReadLink(@PathVariable String id) {
         return bookService.getReadLink(id);
+>>>>>>> origin/main
     }
 }
